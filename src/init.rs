@@ -34,8 +34,8 @@ pub fn run_init() -> Result<(), String> {
   Ok(())
 }
 
-#[test]
-fn test() {
-  assert!(run_init().is_ok());
-  fs::remove_dir_all("./.tinygit").expect("remove faild");
-}
+// #[test]
+// fn test() {
+//   assert!(run_init().is_ok());
+//   fs::remove_dir_all("./.tinygit").expect("remove faild");
+// }

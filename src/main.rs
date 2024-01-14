@@ -1,7 +1,6 @@
 use std::env;
 
-mod init;
-mod add;
+use tinygit::{init, add};
 
 fn main() {
   let args: Vec<String> = env::args().collect();

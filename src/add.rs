@@ -29,3 +29,12 @@ fn write_index(file_path: &String) -> Result<(), String> {
   println!("{}", file_text);
   Ok(())
 }
+
+// #[test]
+// fn test() {
+//   use crate::init;
+
+//   init::run_init().expect("init failed");
+//   assert!(run_add(&"text.txt".to_string()).is_ok());
+//   fs::remove_dir_all("./.tinygit").expect("remove faild");
+// }
