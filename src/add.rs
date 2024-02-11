@@ -1,8 +1,6 @@
 use std::{fs::{File, self}, io::Write};
 
-use flate2::{Compression, write::ZlibEncoder};
-
-use crate::{index::get_index_contents, sha1::generate_hash};
+use crate::{index::get_index_contents, sha1::generate_hash, zlib};
 
 pub fn run_add(file_path: &String) -> Result<(), String> {
   write_index(file_path)?;
@@ -41,14 +39,8 @@ fn create_object() -> Result<(), String> {
     };
 
     let blob = format!("blob {}\0{}", text.as_bytes().len(), text);
-    // zlib
-    let mut e = ZlibEncoder::new(Vec::new(), Compression::default());
-    match e.write_all(&blob.as_bytes()) {
-      Ok(_) => {},
-      Err(e) => { return Err(e.to_string()); }
-    }
-    let compressed = match e.finish() {
-      Ok(compressed) => compressed,
+    let compressed = match zlib::encode(&blob) {
+      Ok(c) => c,
       Err(e) => { return Err(e.to_string()); }
     };
 
