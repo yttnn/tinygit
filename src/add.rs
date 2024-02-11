@@ -1,7 +1,9 @@
-use std::{fs::{File, self}, io::{Write, BufReader, BufRead}};
+use std::{fs::{File, self}, io::Write};
 
 use crypto::{sha1::Sha1, digest::Digest};
 use flate2::{Compression, write::ZlibEncoder};
+
+use crate::index::get_index_contents;
 
 pub fn run_add(file_path: &String) -> Result<(), String> {
   write_index(file_path)?;
@@ -60,39 +62,6 @@ fn create_object() -> Result<(), String> {
     
   }
   Ok(())
-}
-
-fn get_index_contents() -> Result<Vec<IndexContent>, String> {
-  let index_file = match File::open("./.tinygit/index") {
-    Ok(file) => file,
-    Err(_) => { return Err("index file not exists".to_string()); }
-  };
-
-  let mut contents_list: Vec<IndexContent> = Vec::new();
-  let bufreader = BufReader::new(index_file);
-  for line in bufreader.lines() {
-    let line = line.unwrap();
-    let line_split: Vec<&str> = line.split(" ").collect();
-    let content = IndexContent::new(line_split[0], line_split[1], line_split[2]);
-    contents_list.push(content);
-  }
-  Ok(contents_list)
-}
-
-struct IndexContent {
-  status: String,
-  hash: String,
-  path: String,
-}
-
-impl IndexContent {
-  fn new(status: &str, hash: &str, path: &str) -> Self {
-    Self {
-      status: status.to_string(),
-      hash: hash.to_string(),
-      path: path.to_string(),
-    }
-  }
 }
 
 // #[test]
