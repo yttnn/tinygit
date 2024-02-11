@@ -1,9 +1,8 @@
 use std::{fs::{File, self}, io::Write};
 
-use crypto::{sha1::Sha1, digest::Digest};
 use flate2::{Compression, write::ZlibEncoder};
 
-use crate::index::get_index_contents;
+use crate::{index::get_index_contents, sha1::generate_hash};
 
 pub fn run_add(file_path: &String) -> Result<(), String> {
   write_index(file_path)?;
@@ -23,9 +22,7 @@ fn write_index(file_path: &String) -> Result<(), String> {
   };
 
   let blob = format!("blob {}\0{}", file_text.as_bytes().len(), file_text);
-  let mut hasher = Sha1::new();
-  hasher.input_str(&blob);
-  let hex = hasher.result_str();
+  let hex = generate_hash(&blob);
   let status = "100644";
   println!("{}", hex);
   index_file.write(&format!("{} {} {}\n", status, hex, file_path).as_bytes()).unwrap();
