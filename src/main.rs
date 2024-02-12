@@ -1,6 +1,6 @@
 use std::env;
 
-use tinygit::{init, add};
+use tinygit::{add, commit, init};
 
 fn main() {
   let args: Vec<String> = env::args().collect();
@@ -32,6 +32,17 @@ fn main() {
       Err(e) => { eprintln!("{}", e); }
     }
     
+    return;
+  }
+  if args[1] == "commit" {
+    if args.len() != 3 {
+      eprintln!("no commit message");
+      return;
+    }
+    match commit::run_commit(&args[2]) {
+      Ok(_) => { println!("tinigit commit"); }
+      Err(e) => { eprintln!("{}", e); }
+    }
     return;
   }
   //
