@@ -1,6 +1,6 @@
 use std::env;
 
-use tinygit::{add, commit, init};
+use tinygit::{add, catfile::run_catfile, commit, init};
 
 fn main() {
   let args: Vec<String> = env::args().collect();
@@ -41,6 +41,17 @@ fn main() {
     }
     match commit::run_commit(&args[2]) {
       Ok(_) => { println!("tinigit commit"); }
+      Err(e) => { eprintln!("{}", e); }
+    }
+    return;
+  }
+  if args[1] == "cat-file" {
+    if args.len() != 3 {
+      eprintln!("no hash");
+      return;
+    }
+    match run_catfile(&args[2]) {
+      Ok(_) => {},
       Err(e) => { eprintln!("{}", e); }
     }
     return;
